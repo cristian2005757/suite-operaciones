@@ -14,12 +14,6 @@
         "desc": "Endpoint /health"
       }
     ],
-    "done": [
-      {
-        "id": "c3",
-        "title": "angelito",
-        "desc": "Mover tarjetas"
-      }
-    ]
+    "done": []
   }
 }

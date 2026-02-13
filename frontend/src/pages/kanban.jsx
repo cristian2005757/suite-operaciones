@@ -18,6 +18,9 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 
+import toast from "react-hot-toast";
+
+
 import { CSS } from "@dnd-kit/utilities";
 
 
@@ -152,39 +155,48 @@ export default function Kanban() {
     })
       .then((res) => {
         setCardsByColumn(res.data.cardsByColumn);
+        toast.success("Tarea creada ✅");
+
         setNewTitle("");
         setNewDesc("");
         setNewCol("todo");
         setIsModalOpen(false);
       })
       .catch((err) => {
-        console.error("Error creando tarjeta:", err);
+        toast.error("No se pudo crear ❌");
+
       });
   }
 
   function onDelete(cardId) {
-    api.delete(`/cards/${cardId}`)
-      .then((res) => setCardsByColumn(res.data.cardsByColumn))
-      .catch((err) => console.error("Error eliminando tarjeta:", err));
+    if (!confirm("¿Eliminar esta tarea?")) return;
+  
+    api
+      .delete(`/cards/${cardId}`)
+      .then((res) => {
+        setCardsByColumn(res.data.cardsByColumn);
+        toast.success("Eliminada 🗑️");
+      })
+      .catch(() => toast.error("No se pudo eliminar ❌"));
   }
+  
   
   function onEdit(card) {
     const title = prompt("Nuevo título:", card.title);
     if (title === null) return;
-    const trimmedTitle = title.trim();
-    if (!trimmedTitle) return;
-
+  
     const desc = prompt("Nueva descripción:", card.desc || "");
-    const newDesc = desc !== null ? desc : card.desc || "";
-
+    if (desc === null) return;
+  
     api
-      .patch(`/cards/${card.id}`, {
-        title: trimmedTitle,
-        desc: newDesc,
+      .patch(`/cards/${card.id}`, { title, desc })
+      .then((res) => {
+        setCardsByColumn(res.data.cardsByColumn);
+        toast.success("Actualizada ✏️");
       })
-      .then((res) => setCardsByColumn(res.data.cardsByColumn))
-      .catch((err) => console.error("Error editando tarjeta:", err));
+      .catch(() => toast.error("No se pudo actualizar ❌"));
   }
+  
   
 
   return (
@@ -195,20 +207,23 @@ export default function Kanban() {
       </p>
 
       <div style={{ marginTop: 14, display: "flex", gap: 10 }}>
-  <button
-    onClick={() => setIsModalOpen(true)}
-    style={{
-      padding: "10px 12px",
-      borderRadius: 12,
-      border: "1px solid rgba(255,255,255,0.12)",
-      background: "rgba(255,255,255,0.08)",
-      color: "white",
-      fontWeight: 800,
-      cursor: "pointer",
-    }}
-  >
-    + Nueva tarea
-  </button>
+    
+      <button
+  onClick={() => setIsModalOpen(true)}
+  style={{
+    padding: "10px 12px",
+    borderRadius: 12,
+    border: "1px solid rgba(255,255,255,0.12)",
+    background: "rgba(255,255,255,0.08)",
+    color: "white",
+    fontWeight: 800,
+    cursor: "pointer",
+  }}
+>
+  + Nueva tarea
+</button>
+
+
 </div>
 
 

@@ -4,6 +4,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/dashboard";
 import Kanban from "./pages/kanban";
 import Login from "./pages/login";
+import { Toaster } from "react-hot-toast";
+
 
 export default function App() {
   return (
@@ -30,6 +32,8 @@ export default function App() {
           <Route path="/login" element={<Login />} />
         </Routes>
       </AppLayout>
+      <Toaster position="top-right" />
+
     </BrowserRouter>
   );
 }
