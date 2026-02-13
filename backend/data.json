@@ -1,0 +1,25 @@
+{
+  "cardsByColumn": {
+    "todo": [
+      {
+        "id": "c1",
+        "title": "Diseñar layout",
+        "desc": "Sidebar + rutas"
+      }
+    ],
+    "doing": [
+      {
+        "id": "c2",
+        "title": "Conectar backend",
+        "desc": "Endpoint /health"
+      }
+    ],
+    "done": [
+      {
+        "id": "c3",
+        "title": "angelito",
+        "desc": "Mover tarjetas"
+      }
+    ]
+  }
+}
