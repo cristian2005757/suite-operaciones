@@ -33,31 +33,24 @@ Aplicación fullstack para gestión de tareas tipo Trello, con Dashboard de KPIs
 cd backend
 npm install
 npm run dev
-
+```
 API: http://localhost:3001
 
-Frontend
-
+### Frontend
+```bash
 cd frontend
 npm install
 npm run dev
-
+```
 App: http://localhost:5173
 
-Credenciales demo
+### Credenciales demo
+- **Email:** admin@demo.com
+- **Password:** 1234
 
-Email: admin@demo.com
-
-Password: 1234
-
-Tecnologías
-
-Frontend: React + Vite, Axios
-
-UI: estilos inline (dark UI)
-
-Drag & Drop: dnd-kit
-
-Backend: Node.js + Express
-
-Auth: JWT
+## Tecnologías
+- **Frontend:** React + Vite, Axios
+- **UI:** estilos inline (dark UI)
+- **Drag & Drop:** dnd-kit
+- **Backend:** Node.js + Express
+- **Auth:** JWT
