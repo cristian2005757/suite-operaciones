@@ -7,6 +7,12 @@ Aplicación fullstack para gestión de tareas tipo Trello, con Dashboard de KPIs
 ![Dashboard](docs/screenshots/dashboard.png)
 ![Kanban](docs/screenshots/kanban.png)
 
+## 🔗 Demo en vivo
+- **Frontend (Vercel):** https://suite-operaciones.vercel.app
+- **Backend API (Render):** https://suite-operaciones.onrender.com
+  - *Nota: la raíz `/` puede responder `Cannot GET /` (normal). Usa `/health` para verificar estado.*
+- **Health check:** https://suite-operaciones.onrender.com/health
+
 ## Funcionalidades
 - ✅ Login / Logout con JWT
 - ✅ Rutas protegidas (si no hay token → /login)
@@ -34,7 +40,7 @@ cd backend
 npm install
 npm run dev
 ```
-API: http://localhost:3001
+**Local API:** http://localhost:3001
 
 ### Frontend
 ```bash
@@ -42,11 +48,31 @@ cd frontend
 npm install
 npm run dev
 ```
-App: http://localhost:5173
+**Local Front:** http://localhost:5173
+
+### Variables de entorno (Frontend)
+Crea un archivo `frontend/.env`:
+
+```
+VITE_API_URL=http://localhost:3001
+```
+
+En producción (Vercel) ya está configurado `VITE_API_URL=https://suite-operaciones.onrender.com`.
 
 ### Credenciales demo
 - **Email:** admin@demo.com
 - **Password:** 1234
+
+## Endpoints principales (API)
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/health` | Verificar estado del backend |
+| POST | `/auth/login` | Login (email, password) |
+| GET | `/cards` | Listar tarjetas (requiere token) |
+| POST | `/cards` | Crear tarjeta |
+| PATCH | `/cards/:id` | Editar tarjeta |
+| PATCH | `/cards/:id/move` | Mover tarjeta de columna |
+| DELETE | `/cards/:id` | Eliminar tarjeta |
 
 ## Tecnologías
 - **Frontend:** React + Vite, Axios
