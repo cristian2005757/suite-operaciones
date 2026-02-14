@@ -52,16 +52,21 @@ function auth(req, res, next) {
 app.get("/health", (req, res) => res.json({ ok: true, message: "Backend running" }));
 
 app.post("/auth/login", (req, res) => {
-    const { email, password } = req.body || {};
-  
-    // ✅ usuario demo (para portafolio)
-    if (email !== "admin@demo.com" || password !== "1234") {
-      return res.status(401).json({ ok: false, message: "Credenciales inválidas" });
-    }
-  
-    const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1d" });
-    res.json({ ok: true, token });
-  });
+  const { email, password } = req.body || {};
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    return res.status(500).json({ ok: false, message: "JWT_SECRET no configurado" });
+  }
+
+  // Usuario demo (para portafolio)
+  if (email !== "admin@demo.com" || password !== "1234") {
+    return res.status(401).json({ ok: false, message: "Credenciales inválidas" });
+  }
+
+  const token = jwt.sign({ email }, secret, { expiresIn: "1d" });
+  res.json({ ok: true, token });
+});
   
 // ✅ Traer tarjetas
 app.get("/cards", auth, (req, res) => {
@@ -119,7 +124,9 @@ app.patch("/cards/:id", auth, (req, res) => {
   let found = false;
 
   for (const colId of Object.keys(cardsByColumn)) {
-    const idx = cardsByColumn[colId].findIndex((c) => c.id === id);
+    const colCards = cardsByColumn[colId];
+    if (!Array.isArray(colCards)) continue;
+    const idx = colCards.findIndex((c) => c.id === id);
     if (idx !== -1) {
       cardsByColumn[colId][idx] = {
         ...cardsByColumn[colId][idx],
@@ -146,8 +153,10 @@ app.delete("/cards/:id", auth, (req, res) => {
   let removed = false;
 
   for (const colId of Object.keys(cardsByColumn)) {
-    const before = cardsByColumn[colId].length;
-    cardsByColumn[colId] = cardsByColumn[colId].filter((c) => c.id !== id);
+    const colCards = cardsByColumn[colId];
+    if (!Array.isArray(colCards)) continue;
+    const before = colCards.length;
+    cardsByColumn[colId] = colCards.filter((c) => c.id !== id);
     if (cardsByColumn[colId].length !== before) removed = true;
   }
 

@@ -67,7 +67,7 @@ export default function Kanban() {
 
   function findColumnByCardId(cardId) {
     return Object.keys(cardsByColumn).find((colId) =>
-      cardsByColumn[colId].some((c) => c.id === cardId)
+      (cardsByColumn[colId] || []).some((c) => c.id === cardId)
     );
   }
 
@@ -184,12 +184,14 @@ export default function Kanban() {
   function onEdit(card) {
     const title = prompt("Nuevo título:", card.title);
     if (title === null) return;
-  
+    const trimmedTitle = title.trim();
+    if (!trimmedTitle) return;
+
     const desc = prompt("Nueva descripción:", card.desc || "");
-    if (desc === null) return;
-  
+    const newDesc = desc !== null ? desc : card.desc || "";
+
     api
-      .patch(`/cards/${card.id}`, { title, desc })
+      .patch(`/cards/${card.id}`, { title: trimmedTitle, desc: newDesc })
       .then((res) => {
         setCardsByColumn(res.data.cardsByColumn);
         toast.success("Actualizada ✏️");
